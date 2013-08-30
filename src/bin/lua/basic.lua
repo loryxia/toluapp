@@ -15,7 +15,7 @@
 -- All occurrences of "char*" will be replaced by "_cstring",
 -- and all occurrences of "void*" will be replaced by "_userdata"
 _basic = {
-  --key script data type, value isxxx
+ --key script data type, value isxxx
  ['lua_Table']='table',
  ['lua_Function']='function',
  ['void'] = '',
@@ -34,8 +34,11 @@ _basic = {
 
  ['GLvoid']='',
  ['GLchar']='char',
- ['GLuint']='number',
  ['GLint']='number',
+ ['GLuint']='number',
+
+ ['real']='number',
+ ['f64']='number',
  
  --[[
  -- for compatibility with tolua 4.0
