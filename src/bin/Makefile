@@ -26,8 +26,8 @@ tolua_lua.o: tolua.c
 	$(CC) -c -DTOLUA_SCRIPT_RUN $(INC) -o $@ $<
 
 clean:
-	rm -f tolua_lua.o $(OBJS) -$(OBJS_D) $(T) $(T_D)
+	rm -f tolua_lua.o $(OBJS) -$(OBJS_D) $(T) $(T_D) toluabind.c
 
 klean:
-	rm -f tolua_lua.o $(OBJS) -$(OBJS_D) $(T_D)
+	rm -f tolua_lua.o $(OBJS) -$(OBJS_D) $(T_D) toluabind.c
 

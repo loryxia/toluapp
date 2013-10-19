@@ -51,7 +51,7 @@ function doit ()
 	end
 
 	-- proccess package
-	local p  = Package(flags.n,flags.f)
+	local p = Package(flags.n,flags.f)
 
 	if flags.p then
 		return        -- only parse

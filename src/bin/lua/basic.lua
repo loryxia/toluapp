@@ -15,48 +15,54 @@
 -- All occurrences of "char*" will be replaced by "_cstring",
 -- and all occurrences of "void*" will be replaced by "_userdata"
 _basic = {
- --key script data type, value isxxx
- ['lua_Table']='table',
- ['lua_Function']='function',
- ['void'] = '',
- ['char'] = 'number',
- ['int'] = 'number',
- ['short'] = 'number',
- ['long'] = 'number',
- ['unsigned'] = 'number',
- ['float'] = 'number',
- ['double'] = 'number',
- ['_cstring'] = 'string',
- ['_userdata'] = 'userdata',
- ['char*'] = 'string',
- ['void*'] = 'userdata',
- ['bool'] = 'boolean',
-
- ['GLvoid']='',
- ['GLchar']='char',
- ['GLint']='number',
- ['GLuint']='number',
-
- ['real']='number',
- ['f64']='number',
- 
- --[[
- -- for compatibility with tolua 4.0
- ['lua_Object'] = 'value',
- ['LUA_VALUE'] = 'value',
- ['lua_State*'] = 'state',
- ['_lstate'] = 'state',
- ['lua_Function'] = 'value',
- --]]
+    --key script data type, value isxxx
+    ['lua_Table']='table',
+    ['lua_Function']='function',
+    ['lua_Table_ref']='table_ref',
+    ['lua_Function_ref']='function_ref',
+    ['void'] = '',
+    ['char'] = 'number',
+    ['int'] = 'number',
+    ['short'] = 'number',
+    ['long'] = 'number',
+    ['unsigned'] = 'number',
+    ['float'] = 'number',
+    ['double'] = 'number',
+    ['_cstring'] = 'string',
+    ['_userdata'] = 'userdata',
+    ['char*'] = 'string',
+    ['void*'] = 'userdata',
+    ['bool'] = 'boolean',
+    
+    --opengl type
+    ['GLvoid']='',
+    ['GLchar']='char',
+    ['GLint']='number',
+    ['GLuint']='number',
+    
+    --custom type
+    ['real']='number',
+    ['f64']='number',
+    ['s16']='number',
+    ['s32']='number',
+    ['u16']='number',
+    ['u32']='number',
+    
+    -- for compatibility with tolua 4.0
+    -- ['lua_Object'] = 'value',
+    -- ['LUA_VALUE'] = 'value',
+    -- ['lua_State*'] = 'state',
+    -- ['_lstate'] = 'state',
+    -- ['lua_Function'] = 'value',
 }
 
 _basic_ctype = {
- number = "lua_Number",
- string = "const char*",
- userdata = "void*",
- boolean = "bool",
- value = "int",
- state = "lua_State*",
+    number = "lua_Number",
+    string = "const char*",
+    userdata = "void*",
+    boolean = "bool",
+    value = "int",
+    state = "lua_State*",
 }
 
 -- functions the are used to do a 'raw push' of basic types
@@ -105,36 +111,41 @@ end
 
 -- Error handler
 function tolua_error (s,f)
-if _curr_code then
-	print("***curr code for error is "..tostring(_curr_code))
-	print(debug.traceback())
-end
- local out = _OUTPUT
- _OUTPUT = _STDERR
- if strsub(s,1,1) == '#' then
-  write("\n** tolua: "..strsub(s,2)..".\n\n")
-  if _curr_code then
-   local _,_,s = strfind(_curr_code,"^%s*(.-\n)") -- extract first line
-   if s==nil then s = _curr_code end
-   s = gsub(s,"_userdata","void*") -- return with 'void*'
-   s = gsub(s,"_cstring","char*")  -- return with 'char*'
-   s = gsub(s,"_lstate","lua_State*")  -- return with 'lua_State*'
-   write("Code being processed:\n"..s.."\n")
-  end
- else
- if not f then f = "(f is nil)" end
-  print("\n** tolua internal error: "..f..s..".\n\n")
-  return
- end
- _OUTPUT = out
+    if _curr_code then
+        print("***curr code for error is "..tostring(_curr_code))
+        print(debug.traceback())
+    end
+ 
+    local out = _OUTPUT
+    _OUTPUT = _STDERR
+    if strsub(s,1,1) == '#' then
+        write("\n** tolua: "..strsub(s,2)..".\n\n")
+        if _curr_code then
+            local _,_,s = strfind(_curr_code,"^%s*(.-\n)") -- extract first line
+            if s==nil then 
+                s = _curr_code 
+            end
+            s = gsub(s,"_userdata","void*") -- return with 'void*'
+            s = gsub(s,"_cstring","char*")  -- return with 'char*'
+            s = gsub(s,"_lstate","lua_State*")  -- return with 'lua_State*'
+            write("Code being processed:\n"..s.."\n")
+        end
+    else
+        if not f then f = "(f is nil)" end
+        print("\n** tolua internal error: "..f..s..".\n\n")
+        return
+    end
+    _OUTPUT = out
 end
 
 function warning (msg)
- if flags.q then return end
- local out = _OUTPUT
- _OUTPUT = _STDERR
- write("\n** tolua warning: "..msg..".\n\n")
- _OUTPUT = out
+    if flags.q then 
+        return 
+    end
+    local out = _OUTPUT
+    _OUTPUT = _STDERR
+    write("\n** tolua warning: "..msg..".\n\n")
+    _OUTPUT = out
 end
 
 -- register an user defined type: returns full type
@@ -142,7 +153,8 @@ function regtype (t)
 	--if isbasic(t) then
 	--	return t
 	--end
-	local ft = findtype(t)
+	
+    local ft = findtype(t)
 
 	if not _usertype[ft] then
 		return appendusertype(t)
@@ -166,13 +178,13 @@ end
 
 -- check if basic type
 function isbasic (type)
- local t = gsub(type,'const ','')
- local m,t = applytypedef('', t)
- local b = _basic[t]
- if b then
-  return b,_basic_ctype[b]
- end
- return nil
+    local t = gsub(type,'const ','')
+    local m,t = applytypedef('', t) --mod,type
+    local b = _basic[t]
+    if b then
+        return b, _basic_ctype[b]
+    end
+    return nil
 end
 
 -- split string using a token

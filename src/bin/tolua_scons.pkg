@@ -1,4 +1,7 @@
 $lfile "src/bin/lua/compat-5.1.lua"
+$[
+dofile=old_dofile
+$]
 $lfile "src/bin/lua/compat.lua"
 $lfile "src/bin/lua/basic.lua"
 $lfile "src/bin/lua/feature.lua"
@@ -24,8 +27,8 @@ $lfile "src/bin/lua/doit.lua"
 $[
 local err,msg = pcall(doit)
 if not err then
- local _,_,label,msg = strfind(msg,"(.-:.-:%s*)(.*)")
- tolua_error(msg,label)
- print(debug.traceback())
+    local _,_,label,msg = strfind(msg,"(.-:.-:%s*)(.*)")
+    tolua_error(msg,label)
+    print(debug.traceback())
 end
 $]

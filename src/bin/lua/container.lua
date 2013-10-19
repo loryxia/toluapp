@@ -306,8 +306,9 @@ end
 function classContainer:findtype (t)
 
 	t = string.gsub(t, "=.*", "")
+
 	if _basic[t] then
-	 return t
+        return t
 	end
 
 	local _,_,em = string.find(t, "([&%*])%s*$")

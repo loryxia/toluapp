@@ -267,6 +267,7 @@ function classDeclaration:builddeclaration (narg, cplusplus)
 	end
   end
  else
+
   local t = isbasic(type)
   line = concatparam(line,' = ')
   if t == 'state' then

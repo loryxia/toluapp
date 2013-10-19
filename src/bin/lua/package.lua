@@ -14,9 +14,9 @@
 -- Package class
 -- Represents the whole package being bound.
 -- The following fields are stored:
---    {i} = list of objects in the package.
+-- {i} = list of objects in the package.
 classPackage = {
- classtype = 'package'
+    classtype = 'package'
 }
 classPackage.__index = classPackage
 setmetatable(classPackage,classContainer)
@@ -237,38 +237,40 @@ end
 -- Constructor
 -- Expects the package name, the file extension, and the file text.
 function Package (name,fn)
- local ext = "pkg"
 
- -- open input file, if any
- local st,msg
- if fn then
-  st, msg = readfrom(flags.f)
-  if not st then
-   error('#'..msg)
-  end
-  local _; _, _, ext = strfind(fn,".*%.(.*)$")
- end
- local code
- if ext == 'pkg' then
-  code = prep(st)
- else
-  code = "\n" .. read('*a')
-  if ext == 'h' or ext == 'hpp' then
-   code = extract_code(fn,code)
-  end
- end
+    local ext = "pkg"
+    
+    -- open input file, if any
+    local st,msg
+    if fn then
+        st, msg = readfrom(flags.f)
+        if not st then
+            error('#'..msg)
+        end
+        local _; _, _, ext = strfind(fn,".*%.(.*)$")
+    end
+ 
+    local code
+    if ext == 'pkg' then
+        code = prep(st)
+    else
+        code = "\n" .. read('*a')
+        if ext == 'h' or ext == 'hpp' then
+            code = extract_code(fn,code)
+        end
+    end
 
- -- close file
- if fn then
-  readfrom()
- end
+    -- close file
+    if fn then
+        readfrom()
+    end
 
- -- deal with include directive
- local nsubst
- repeat
-  code,nsubst = gsub(code,'\n%s*%$(.)file%s*"(.-)"([^\n]*)\n',
-		function (kind,fn,extra)
-			local _, _, ext = strfind(fn,".*%.(.*)$")
+    -- deal with include directive
+    local nsubst
+    repeat
+        code,nsubst = gsub(code,'\n%s*%$(.)file%s*"(.-)"([^\n]*)\n',
+        function (kind,fn,extra)
+            local _, _, ext = strfind(fn,".*%.(.*)$")
 			local fp,msg
             if path then
                 fp,msg = openfile( path .. "../../../" ..fn,'r')
@@ -298,24 +300,24 @@ function Package (name,fn)
 			else
 				error('#Invalid include directive (use $cfile, $pfile, $lfile or $ifile)')
 			end
-		end)
- until nsubst==0
+        end)
+    until nsubst==0
 
- -- deal with renaming directive
- repeat -- I don't know why this is necesary
-	code,nsubst = gsub(code,'\n%s*%$renaming%s*(.-)%s*\n', function (r) appendrenaming(r) return "\n" end)
- until nsubst == 0
+    -- deal with renaming directive
+    repeat -- I don't know why this is necesary
+        code,nsubst = gsub(code,'\n%s*%$renaming%s*(.-)%s*\n', function (r) appendrenaming(r) return "\n" end)
+    until nsubst == 0
 
- local t = _Package(_Container{name=name, code=code})
- push(t)
- preprocess_hook(t)
- t:preprocess()
- preparse_hook(t)
- t:parse(t.code)
- pop()
- return t
+    local t = _Package(_Container{name=name, code=code})
+    push(t)
+    preprocess_hook(t)
+    t:preprocess()
+    preparse_hook(t)
+    t:parse(t.code)
+    pop()
+ 
+    return t
 end
-
 
 setmetatable(_extra_parameters, { __index = _G })
 

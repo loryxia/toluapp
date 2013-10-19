@@ -15,3 +15,10 @@ all clean klean:
 debug:
 	cd src/bin; make debug
 
+clean:
+	rm -f bin/*
+	rm -f lib/*
+	cd src/bin; make clean
+	cd src/lib; make clean
+	cd src/tests; make clean
+

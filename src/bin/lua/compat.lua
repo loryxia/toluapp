@@ -1,3 +1,4 @@
+-- compatable for lua all kinds of version code
 -------------------------------------------------------------------
 -- Real globals
 -- _ALERT
@@ -33,14 +34,20 @@
 rawtype = type
 
 function do_ (f, err)
-  if not f then print(err); return end
-  local a,b = pcall(f)
-  if not a then print(b); return nil
-  else return b or true
-  end
+    if not f then 
+        print(err) 
+        return
+    end
+    local a,b = pcall(f)
+    if not a then 
+        print(b)
+        return nil
+    else 
+        return b or true
+    end
 end
 
-function dostring(s) return do_(loadstring(s)) end
+function dostring(s) return do_( loadstring(s) ) end
 -- function dofile(s) return do_(loadfile(s)) end
 
 -------------------------------------------------------------------
