@@ -18,8 +18,7 @@ _basic = {
     --key script data type, value isxxx
     ['lua_Table']='table',
     ['lua_Function']='function',
-    ['lua_Table_ref']='table_ref',
-    ['lua_Function_ref']='function_ref',
+    ['lua_Handler']='handler',
     ['void'] = '',
     ['char'] = 'number',
     ['int'] = 'number',

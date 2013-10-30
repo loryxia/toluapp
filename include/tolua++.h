@@ -43,6 +43,7 @@ extern "C" {
 
 typedef int lua_Table;
 typedef int lua_Function;
+typedef int lua_Handler;
 typedef int lua_Object;
 
 #include "lua.h"
@@ -67,6 +68,8 @@ TOLUA_API int tolua_isboolean (lua_State* L, int lo, int def, tolua_Error* err);
 TOLUA_API int tolua_isnumber (lua_State* L, int lo, int def, tolua_Error* err);
 TOLUA_API int tolua_isstring (lua_State* L, int lo, int def, tolua_Error* err);
 TOLUA_API int tolua_istable (lua_State* L, int lo, int def, tolua_Error* err);
+TOLUA_API int tolua_isfunction(lua_State* L, int lo, int def, tolua_Error* err);
+TOLUA_API int tolua_ishandler(lua_State* L, int lo, int def, tolua_Error* err);
 TOLUA_API int tolua_isusertable (lua_State* L, int lo, const char* type, int def, tolua_Error* err);
 TOLUA_API int tolua_isuserdata (lua_State* L, int lo, int def, tolua_Error* err);
 TOLUA_API int tolua_isusertype (lua_State* L, int lo, const char* type, int def, tolua_Error* err);

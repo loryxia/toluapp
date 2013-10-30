@@ -29,7 +29,7 @@ TOLUA_API int tolua_totable(lua_State* L, int narg, void* def)
 
 TOLUA_API int tolua_tofunction(lua_State* L, int narg, void* def)
 {
-    return 0;
+    return lua_gettop(L)<abs(narg) ? def : narg;
 }
 
 TOLUA_API const char* tolua_tostring (lua_State* L, int narg, const char* def)
@@ -141,3 +141,23 @@ TOLUA_API int tolua_getfieldboolean (lua_State* L, int lo, int index, int def)
  lua_pop(L,1);
  return v;
 }
+
+TOLUA_API int tolua_tohandler(lua_State* L, int lo, int def)
+{
+    if (!lua_isfunction(L, lo) && !lua_istable(L, lo))return 0;
+    lua_pushvalue(L, lo);                                           /* stack: ... func */
+    return luaL_ref(L, LUA_REGISTRYINDEX);
+}
+
+TOLUA_API void tolua_remove_handler(lua_State* L, int refid)
+{
+    luaL_unref(L, LUA_REGISTRYINDEX, refid);
+}
+
+
+
+
+
+
+
+

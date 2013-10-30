@@ -261,6 +261,16 @@ TOLUA_API int tolua_isfunction(lua_State* L, int lo, int def, tolua_Error* err)
     return 0;
 }
 
+TOLUA_API int tolua_ishandler (lua_State* L, int lo, int def, tolua_Error* err)
+{
+    if(tolua_istable(L, lo, def, err) || tolua_isfunction(L, lo, def, err))
+    return 1;
+	err->index = lo;
+	err->array = 0;
+	err->type = "handler";
+	return 0;
+}
+
 TOLUA_API int tolua_isusertable (lua_State* L, int lo, const char* type, int def, tolua_Error* err)
 {
 	if (def && lua_gettop(L)<abs(lo))
@@ -597,8 +607,7 @@ int tolua_isuserdatafield
  return 1;
 }
 
-int tolua_isusertypefield
- (lua_State* L, int lo, const char* type, int i, int def, tolua_Error* err)
+int tolua_isusertypefield(lua_State* L, int lo, const char* type, int i, int def, tolua_Error* err)
 {
 	lua_pushnumber(L,i);
 	lua_gettable(L,lo);
