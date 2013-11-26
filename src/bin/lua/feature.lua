@@ -50,10 +50,13 @@ function classFeature:buildnames ()
         self.name = n[1]
         self.name = string.gsub(self.name, ":%d*$", "")
 
-        --bug if n[1] is Shader_getTechnique,so change to Shader_geTechnique
-        if not n[2] then
-            n[2] = applyrenaming(n[1])
-        end
+        -- bug if n[1] is Shader_getTechnique,so change to Shader_geTechnique
+        -- add by loryxia for classname_method Partten
+        -- print("buildnames------>>>",n[1],n[2])
+        -- if not n[2] then
+        --    n[2] = applyrenaming(n[1])
+        -- end
+        
         self.lname = n[2] or gsub(n[1],"%[.-%]","")
         self.lname = string.gsub(self.lname, ":%d*$", "")
         self.original_name = self.name

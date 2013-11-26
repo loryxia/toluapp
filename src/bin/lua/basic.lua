@@ -98,10 +98,10 @@ end
 function applyrenaming (s)
     for i=1,getn(_renaming) do
         --print(s,"|||",_renaming[i].old,"*******",_renaming[i].new)
+        -- ben modify
         -- bug if old is Shader_getTechnqiue , new is getTechnqiue , result is Shader_geTechnqiue
         local m,n = gsub(s,_renaming[i].old,_renaming[i].new)   --second param is iter number
         if n ~= 0 then
-            --print("&&&&&&",m)
             return m
 		end
 	end

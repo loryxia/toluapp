@@ -630,15 +630,16 @@ function classContainer:doparse (s)
   		end
   	end
    _curr_code = strsub(s,b,e)
-
-   --add by ben
-   local s0,s1,method=strfind(decl,"(%w*_%w*)")
-   if s0 then
-       s0,s1,new=strfind(method,"_(%w*)")
-       local rename=method.." @ "..new
-       appendrenaming(rename)
-   end
-   --add by ben end
+   
+   -- add by loryxia for classname_method Partten
+   -- local s0,s1,method=strfind(decl,"(%w*_%w*)")
+   -- if s0 then
+   --     s0,s1,new=strfind(method,"_(%w*)")
+   --     local rename=method.." @ "..new
+   --     appendrenaming(rename)
+   -- end
+   -- add by ben end
+   
    Function(decl,arg,const)
    return strsub(s,e+1)
   end
